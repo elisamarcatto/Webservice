@@ -19,19 +19,24 @@ public class Webservice
         Scanner keyboard = new Scanner(System.in);
         System.out.println("Insira o numero de ID: ");
         String id = keyboard.nextLine();
-        String URL = "http://ec2-35-164-139-210.us-west-2.compute.amazonaws.com"+"/hirers/"+id+"/opportunities"; 
+        String URL = "http://ec2-35-164-223-211.us-west-2.compute.amazonaws.com"+"/hirers/"+id+"/opportunities"; 
         
         /* Obtendo JSON a partir da URL */
-        String json = getJson(URL);  
-        
+        String json = getJson(URL);         
         Gson gson = new Gson();   
         
+        //countOpp(json, gson, id);   // fornece o numero de vagas do contratante 'id'     
+        
+    }
+    
+    private static void countOpp(String json, Gson gson, String id){
+         
         JsonParser parser = new JsonParser();
         JsonArray jArray = parser.parse(json).getAsJsonArray();        
         
         System.out.println("Contador de vagas do usuario '"+id+"': "+jArray.size());
-    }
-
+    } 
+     
     private static String getJson(String urlString) throws Exception {
         BufferedReader reader = null;
         try {
