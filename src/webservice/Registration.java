@@ -5,28 +5,27 @@ package webservice;
 
 public class Registration
 {
+    private Integer id;
+    private String title;
+    private String description;  
     private String created_at;
-    private String updated_at;
-    private Category category;        
+    //private String updated_at;
+    private boolean is_contact_available;
+    private boolean is_active;
     private Hirer hirer;
     private Location location;
-    private String id;
-    private String title;
-    private String description;   
-    private String is_contact_available;
-    private String is_active;
-    private String frequency;
-    private String is_automatic;
-    private String score;
+    private String frequency;       
+    private boolean is_automatic;
+    private Integer score;
+    private Category category;   
+    private Integer salary_requirements;
     private String characteristics;
     private String starts;
-    private String amount_candidates;
-    private String amount_visualizations;
+    private Integer amount_candidates;
+    private Integer amount_visualizations;
     private String feedback;
     private String salary_research;
-    private String relevancy;
-    
-    
+    private String relevancy;    
        
     public void setCreatedAt(String created_at){
         this.created_at = created_at;
@@ -36,13 +35,13 @@ public class Registration
         return this.created_at;
     }
     
-    public void setUpdatedAt(String created_at){
-        this.updated_at = updated_at;
-    }   
+    //public void setUpdatedAt(String created_at){
+    //    this.updated_at = updated_at;
+    //}   
     
-    public String getUpdatedAt(String created_at){
-        return this.updated_at;
-    }
+    //public String getUpdatedAt(String created_at){
+    //    return this.updated_at;
+    //}
    
     public void setCategory(Category category){
         this.category = category;
@@ -68,11 +67,11 @@ public class Registration
         return this.location;
     }
    
-    public void setId(String id){
+    public void setId(Integer id){
         this.id = id;
     }   
     
-    public String getId(String id){
+    public Integer getId(){
         return this.id;
     }
     
@@ -80,7 +79,7 @@ public class Registration
         this.title = title;
     }   
     
-    public String getTitle(String title){
+    public String getTitle(){
         return this.title;
     }
     
@@ -88,23 +87,23 @@ public class Registration
         this.description = descrip;
     }   
     
-    public String getDescrip(String descrip){
+    public String getDescrip(){
         return this.description;
     }
 
-    public String getIsContactAvailable(){
+    public boolean getIsContactAvailable(){
         return this.is_contact_available;
     }
 
-    public void setIsContactAvailable(String is_contact_available){
+    public void setIsContactAvailable(boolean is_contact_available){
         this.is_contact_available = is_contact_available;
     }
 
-    public String getIsActive(){
+    public boolean getIsActive(){
         return this.is_active;
     }
 
-    public void setIsActive(String is_active){
+    public void setIsActive(boolean is_active){
         this.is_active = is_active;
     }
 
@@ -116,19 +115,19 @@ public class Registration
         this.frequency = frequency;
     }
 
-    public String getIsAutomatic(){
+    public boolean getIsAutomatic(){
         return this.is_automatic;
     }
 
-    public void setIsAutomatic(String is_automatic){
+    public void setIsAutomatic(boolean is_automatic){
         this.is_automatic = is_automatic;
     }
 
-    public String getScore(){
+    public Integer getScore(){
         return this.score;
     }
 
-    public void setScore(String score){
+    public void setScore(Integer score){
         this.score = score;
     }
 
@@ -148,19 +147,19 @@ public class Registration
         this.starts = starts;
     }
 
-    public String getAmountCandidates(){
+    public Integer getAmountCandidates(){
         return this.amount_candidates;
     }
 
-    public void setAmountCandidates(String amount_candidates){
+    public void setAmountCandidates(Integer amount_candidates){
         this.amount_candidates = amount_candidates;
     }
 
-    public String getAmountVisualizations(){
+    public Integer getAmountVisualizations(){
         return this.amount_visualizations;
     }
 
-    public void setAmountVisualizations(String amount_visualizations){
+    public void setAmountVisualizations(Integer amount_visualizations){
         this.amount_visualizations = amount_visualizations;
     }
 
@@ -186,6 +185,14 @@ public class Registration
 
     public void setRelevancy(String relevancy){
         this.relevancy = relevancy;
+    }
+
+    public Integer getSalaryRequirements(){
+        return this.salary_requirements;
+    }
+
+    public void setSalaryRequirements(Integer salary_requirements){
+        this.salary_requirements = salary_requirements;
     }
 }
 
