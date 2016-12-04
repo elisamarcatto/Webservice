@@ -5,7 +5,7 @@ package webservice;
 
 class Hirer
 {
-    private String id;
+    private Integer id;
     private String name;
     private String account_type;
     private String cnpj;
@@ -13,13 +13,13 @@ class Hirer
     private String phone;
     private String email;
     private String mobile_phone;
-    private String is_plan_active;
+    private boolean is_plan_active;
 
-    public String getId(){
+    public Integer getId(){
         return this.id;
     }
 
-    public void setId(String id){
+    public void setId(Integer id){
         this.id = id;
     }
 
@@ -79,11 +79,11 @@ class Hirer
         this.mobile_phone = mobile_phone;
     }
 
-    public String getIs_plan_active(){
+    public boolean getIs_plan_active(){
         return this.is_plan_active;
     }
 
-    public void setIsPlanActive(String is_plan_active){
+    public void setIsPlanActive(boolean is_plan_active){
         this.is_plan_active = is_plan_active;
     }   
 }
