@@ -5,14 +5,14 @@ package webservice;
 
 class Category
 {
-    private String id;
+    private Integer id;
     private String name;
     
-    public void setId(String id){
+    public void setId(Integer id){
         this.id = id;
     }
     
-    public String getId(){
+    public Integer getId(){
         return this.id;
     }
     
