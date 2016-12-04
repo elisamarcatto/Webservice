@@ -22,20 +22,36 @@ public class Webservice
 {
      public static void main(String[] args) throws Exception {
         
-        /* Leitura do teclado para receber ID do usuario */ 
-        //Scanner keyboard = new Scanner(System.in);
-        //System.out.println("Insira o numero de ID: ");
-        //String id = keyboard.nextLine();
-        //String URL = "http://ec2-35-164-223-211.us-west-2.compute.amazonaws.com"+"/hirers/"+id+"/opportunities"; 
+        String URL = "http://ec2-35-164-223-211.us-west-2.compute.amazonaws.com/opportunities"; 
          
         Registration registration = new Registration();
         Category category = new Category();
-        Hirer hirer = new Hirer();
-          
+        Hirer hirer = new Hirer();          
         Location location = new Location();
         
+        // Para testar o programa sem precisar inserir entradas
+        //String json = "{\"created_at\":\"2016-07-01 19:06:12\",\"updated_at\":\"2016-11-21 15:21:07\",\"category\":{\"id\":\"1\",\"name\":\"Empregada Dom\\u00e9stica\"},\"hirer\":{\"id\":13901,\"name\":\"Felipe Matos Dos Santos\",\"account_type\":\"pf\",\"cnpj\":null,\"company_contact_name\":null,\"phone\":\"(21) 99870-0327\",\"email\":\"felipe_med@yahoo.com.br\",\"mobile_phone\":\"(21) 93234-8378\",\"is_plan_active\":true},\"location\":{\"neighborhood\":\"Ipanema\",\"address\":\"Prudente de Morais\",\"address_type\":\"Rua\",\"latitude\":-22.9851707,\"longitude\":-43.2071601,\"city_id\":\"6861\",\"city\":\"Rio de Janeiro\",\"zipcode\":\"22420043\",\"state\":\"RJ\"},\"id\":98765,\"title\":\"Vaga para Empregada Dom\\u00e9stica\",\"description\":\"Casal sem filhos e sem animais dom\\u00e9sticos  procura empregada \\n            dom\\u00e9stica para cuidar de um apartamento duplex. Limpar, cozinhar, lavar e \\n            passar roupas. In\\u00edcio a partir de 20 de julho\",\"is_contact_available\":true,\"is_active\":true,\"frequency\":\"mensalista_2x\",\"is_automatic\":false,\"score\":3,\"salary_requirements\":1100,\"characteristics\":[],\"starts\":\"esse_mes\",\"amount_candidates\":19,\"amount_visualizations\":58,\"feedback\":\"\",\"salary_research\":\"\",\"relevancy\":\"\"}";
+        
+        String json = receiveInput(registration, category, hirer, location);
+        System.out.println(json);    
+        
+        String request = postJson(URL, json);        
+     
+        //countOpp(json, gson, id);   // fornece o numero de vagas do contratante 'id'     
+        
+        System.out.println(json);
+        System.out.println(request);
+    }
+    
+    private static String receiveInput(Registration registration, Category category, Hirer hirer, Location location){
+        
         System.out.println("** ADICIONAR OPORTUNIDADE **");
-         
+        
+        Scanner keyboardId = new Scanner(System.in); 
+        System.out.println("Insira o ID da oportunidade: ");
+        String id = keyboardId.nextLine();
+        registration.setId(Integer.parseInt(id));
+        
         Scanner keyboardTitle = new Scanner(System.in);
         System.out.println("Insira o título da vaga: ");
         String title = keyboardTitle.nextLine();
@@ -55,22 +71,20 @@ public class Webservice
         System.out.println("O contato está disponível?(sim/nao): ");
         String contact = keyboardContact.nextLine();
         if(contact.equals("sim")){
-            contact = "true";
-        } else contact = "false";
-        registration.setIsContactAvailable(contact);
+            registration.setIsContactAvailable(true);
+        } else registration.setIsContactAvailable(false);
         
         Scanner keyboardActive = new Scanner(System.in); 
         System.out.println("Está ativo?(sim/nao): ");
         String active = keyboardActive.nextLine();
         if(active.equals("sim")){
-            active = "true";
-        } else active = "false";
-        registration.setIsActive(active);
+            registration.setIsActive(true);
+        } else registration.setIsActive(false);
         
         Scanner keyboardIdH = new Scanner(System.in); 
         System.out.println("Insira o ID do contratante: ");
         String idHirer = keyboardIdH.nextLine();
-        hirer.setId(idHirer);
+        hirer.setId(Integer.parseInt(idHirer));
         
         Scanner keyboardNameH = new Scanner(System.in); 
         System.out.println("Insira o nome do contratante: ");
@@ -93,9 +107,9 @@ public class Webservice
             cnpj = keyboardCnpj.nextLine();
             hirer.setCnpj(cnpj);
         } else{
-            company = null;
+            company = "null";
             hirer.setCompanyContactName(company);
-            cnpj = null;
+            cnpj = "null";
             hirer.setCnpj(cnpj);
         } 
         hirer.setAccountType(accType);
@@ -119,9 +133,8 @@ public class Webservice
         System.out.println("O plano do contratante está ativo?(sim/nao): ");
         String plan = keyboardPlan.nextLine();
         if(plan.equals("sim")){
-            plan = "true";
-        } else plan = "false";
-        hirer.setIsPlanActive(plan);
+            hirer.setIsPlanActive(true);
+        } else hirer.setIsPlanActive(false);
         registration.setHirer(hirer);
         
         Scanner keyboardNeigh = new Scanner(System.in); 
@@ -139,9 +152,9 @@ public class Webservice
         String addrType = keyboardAddrType.nextLine();
         location.setAddressType(addrType);
         
-        String latitude = "-22.9851707";
+        Double latitude = -22.9851707;
         location.setLatitude(latitude);
-        String longitude = "-43.2071601";
+        Double longitude = -43.2071601;
         location.setLongitude(longitude);
         String cityId = "6861";
         location.setCityId(cityId);
@@ -167,81 +180,93 @@ public class Webservice
         String freq = keyboardFreq.nextLine();
         registration.setFrequency(freq);
         
-        String is_automatic = "false";
+        boolean is_automatic = false;
         registration.setIsAutomatic(is_automatic);
-        String score = "3";
-        registration.setScore(score);
-        String categoryId = "1";
-        category.setId(categoryId);
-        String categoryName = "Empregada Dom\\u00e9stica";
+        
+        Scanner keyboardScore = new Scanner(System.in); 
+        System.out.println("Insira a pontuação do serviço: ");
+        String score = keyboardScore.nextLine();
+        registration.setScore(Integer.parseInt(score));
+        
+        Scanner keyboardCatId = new Scanner(System.in); 
+        System.out.println("Insira o ID da categoria do serviço: ");
+        String categoryId = keyboardCatId.nextLine();
+        category.setId(Integer.parseInt(categoryId));
+        
+        Scanner keyboardCatName = new Scanner(System.in); 
+        System.out.println("Insira o nome da cateogoria do serviço: ");
+        String categoryName = keyboardCatName.nextLine();
         category.setName(categoryName);
         registration.setCategory(category);
         
         Scanner keyboardSalary = new Scanner(System.in); 
         System.out.println("Insira os requisitos de salário: ");
         String salary = keyboardSalary.nextLine();
-        registration.setSalaryResearch(salary);
+        registration.setSalaryRequirements(Integer.parseInt(salary));
+        
+        String characteristics = "";
+        registration.setCharacteristics(characteristics);
         
         Scanner keyboardStarts = new Scanner(System.in); 
         System.out.println("Insira o início da prestação dos serviços desejado: ");
         String starts = keyboardStarts.nextLine();
         registration.setStarts(starts);
         
-        String amount_candidates = "19";
-        registration.setAmountCandidates(amount_candidates);
-        String amount_visualizations = "58";
-        registration.setAmountVisualizations(amount_visualizations);
-        String feedback = "";
+        Scanner keyboardAmountCand = new Scanner(System.in); 
+        System.out.println("Insira o número de candidatos: ");
+        String amount_candidates = keyboardAmountCand.nextLine();
+        registration.setAmountCandidates(Integer.parseInt(amount_candidates));
+        
+        Scanner keyboardAmountVisu = new Scanner(System.in); 
+        System.out.println("Insira o número de visualizações: ");
+        String amount_visualizations = keyboardAmountVisu.nextLine();
+        registration.setAmountVisualizations(Integer.parseInt(amount_visualizations));
+        
+        Scanner keyboardFeedback = new Scanner(System.in); 
+        System.out.println("Qual o feedback do serviço?: ");
+        String feedback = keyboardFeedback.nextLine();
         registration.setFeedback(feedback);
-        String salary_research = "";
+        
+        Scanner keyboardSalResearch = new Scanner(System.in); 
+        System.out.println("Insira o salário de pesquisa: ");
+        String salary_research = keyboardSalResearch.nextLine();
         registration.setSalaryResearch(salary_research);
-        String relevancy = "";
-        registration.setRelevancy(relevancy);
+        
+        Scanner keyboardRelevancy = new Scanner(System.in); 
+        System.out.println("Insira a relevância do serviço: ");
+        String relevancy = keyboardRelevancy.nextLine();
+        registration.setRelevancy(relevancy);        
         
         Gson gson = new Gson();
-        String json = gson.toJson(registration);
-        System.out.println(json);
-        
-        
-     
-        //countOpp(json, gson, id);   // fornece o numero de vagas do contratante 'id'     
-        
+        String json = gson.toJson(registration);                                                              
+              
+        return json;
     }
      
-    private static String postJson(String url, String json) throws MinhaExcecao{
+    private static String postJson(String url, String json) throws MyException{
         
-        try {
-        // Cria um objeto HttpURLConnection:
+        try {        
         HttpURLConnection request = (HttpURLConnection) new URL(url).openConnection();
 
         try {
-            // Define que a conexão pode enviar informações e obtê-las de volta:
             request.setDoOutput(true);
             request.setDoInput(true);
-
-            // Define o content-type:
+            
             request.setRequestProperty("Content-Type", "application/json");
 
-            // Define o método da requisição:
             request.setRequestMethod("POST");
 
-            // Conecta na URL:
             request.connect();
 
-            // Escreve o objeto JSON usando o OutputStream da requisição:
             try (OutputStream outputStream = request.getOutputStream()) {
                 outputStream.write(json.getBytes("UTF-8"));
             }
-
-            // Caso você queira usar o código HTTP para fazer alguma coisa, descomente esta linha.
-            //int response = request.getResponseCode();
-
             return readResponse(request);
         } finally {
             request.disconnect();
         }
         } catch (IOException ex) {
-            throw new MinhaExcecao(ex);
+            throw new MyException(ex);
        }
     }
     
@@ -284,10 +309,10 @@ public class Webservice
         return new String(os.toByteArray());
     }
     
-    public static class MinhaExcecao extends Exception {
+    public static class MyException extends Exception {
         private static final long serialVersionUID = 1L;
 
-        public MinhaExcecao(Throwable cause) {
+        public MyException(Throwable cause) {
             super(cause);
         }
     }
