@@ -8,8 +8,8 @@ class Location
    private String neighborhood;
    private String address;
    private String address_type;
-   private String latitude;
-   private String longitude;
+   private Double latitude;
+   private Double longitude;
    private String city_id;
    private String city;
    private String zipcode;
@@ -39,19 +39,19 @@ class Location
         this.address_type = address_type;
     }
 
-    public String getLatitude(){
+    public Double getLatitude(){
         return this.latitude;
     }
 
-    public void setLatitude(String latitude){
+    public void setLatitude(Double latitude){
         this.latitude = latitude;
     }
 
-    public String getLongitude(){
+    public Double getLongitude(){
         return this.longitude;
     }
 
-    public void setLongitude(String longitude){
+    public void setLongitude(Double longitude){
         this.longitude = longitude;
     }
 
